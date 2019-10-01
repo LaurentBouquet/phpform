@@ -26,7 +26,6 @@
             $passwd = "azerty";
             $dbname = "slamquiz";
 
-
             $idConnexion = new MySQLi($host, $username, $passwd, $dbname);
             if ($idConnexion) {
 
