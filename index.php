@@ -2,68 +2,58 @@
 <html>
 
 <head>
-    <title>Catégorie de QCM</title>
+    <title>Liste des catégories de QCM</title>
     <meta charset="UTF-8">
 </head>
 
 <body>
-    <h1>Catégorie de QCM</h1>
+    <h1>Liste des catégories de QCM</h1>
 
-    <form action="index.php">
-        <label>Identifiant </label><input type="text" name="shortname" size="10" />
-    </form>
-    <br />
+    <?php
+    header('Content-Type: text/html; charset=utf-8');
 
-    <div>
-        <?php
-        if (isset($_GET['shortname'])) {
-            $id = -1;
-            $shortname = $_GET['shortname'];
-            $longname = "";
+    $host = "localhost";
+    $username = "slamquiz";
+    $passwd = "sZzbN1bIdAGr7NrE";
+    $dbname = "slamquiz";
 
-            $host = "localhost";
-            $username = "slamquiz";
-            $passwd = "azerty";
-            $dbname = "slamquiz";
+    print('<table border="1">');
 
-            $idConnexion = new MySQLi($host, $username, $passwd, $dbname);
-            if ($idConnexion) {
+    print('<tr>');
+    print('<th>Id</th>');
+    print('<th>Identifiant</th>');
+    print('<th>Nom de la catégorie</th>');
+    print('</tr>');
 
-                $result = $idConnexion->query("SELECT * FROM tbl_category WHERE shortname='" . $shortname . "';");
 
-                if ($result) {
-                    $row = $result->fetch_assoc();
-                    $id = $row['id'];
-                    $shortname = $_GET['shortname'];
-                    $longname = $row['longname'];
-                } else {
-                    print("Impossible d'exécuter la requête");
-                }
-                $idConnexion->close();
-            } else {
-                print("Impossible de se connecter");
-            }
+    $idConnexion = new \MySQLi($host, $username, $passwd, $dbname);
+    if ($idConnexion) {
 
-            print('<table border="1">');
+        $idConnexion->set_charset("utf8");
 
-            print('<tr>');
-            print('<th>Id</th>');
-            print('<th>Identifiant</th>');
-            print('<th>Nom de la catégorie</th>');
-            print('</tr>');
+        $result = $idConnexion->query("SELECT * FROM tbl_category ;");
 
-            print('<tr>');
-            print('<td>' . $id . '</td>');
-            print('<td>' . $shortname . '</td>');
-            print('<td>' . $longname . '</td>');
-            print('</tr>');
-
-            print('</table>');
+        if ($result) {
+            while ($row = $result->fetch_assoc()) {
+                $id = $row['id'];
+                $shortname = $row['shortname'];
+                $longname = $row['longname'];
+                print('<tr>');
+                print('<td>' . $id . '</td>');
+                print('<td>' . $shortname . '</td>');
+                print('<td>' . $longname . '</td>');
+                print('</tr>');
+            };
         } else {
-            print("Veuillez saisir l'identifiant de la catégorie.");
+            print("Impossible d'exécuter la requête");
         }
-        ?>
-    </div>
+        $idConnexion->close();
+    } else {
+        print("Impossible de se connecter");
+    }
+
+    print('</table>');
+    ?>
 
 </body>
 
